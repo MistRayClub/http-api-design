@@ -1,0 +1,26 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: auth-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 120m
+
+logging:
+  config: classpath:logback-spring.xml
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # 别名扫描
+  type-aliases-package: com.kaws.auth
+  configuration:
+    ## 日志实现
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

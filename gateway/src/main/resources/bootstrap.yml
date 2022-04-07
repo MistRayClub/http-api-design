@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: gateway-service
+  jackson:
+    serialization:
+      indent-output: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+
+      routes:
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
