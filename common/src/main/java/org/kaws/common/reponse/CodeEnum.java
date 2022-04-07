@@ -7,7 +7,7 @@ import lombok.Getter;
  * @author Bosco
  * @date 2022/4/1 7:48 下午
  */
-public enum ResponseStatusEnum {
+public enum CodeEnum {
 
     SUCCESS(200, "OK"),
 
@@ -32,7 +32,7 @@ public enum ResponseStatusEnum {
     private final String message;
 
 
-    ResponseStatusEnum(int code, String message) {
+    CodeEnum(int code, String message) {
         this.code = code;
         this.message = message;
     }
