@@ -7,18 +7,17 @@ import lombok.Getter;
  * @author Bosco
  * @date 2022/4/1 7:48 下午
  */
-public enum ResultCode {
+public enum ResponseStatusEnum {
 
-    /**
-     * 成功
-     */
-    SUCCESS(200, "操作成功"),
+    SUCCESS(200, "OK"),
 
-    /**
-     * 失败
-     */
-    FAILURE(500, "操作失败");
+    FAILURE(500, "Internal Server Error"),
 
+    TOKEN_INVALID(401, "Token Invalid"),
+
+    TOKEN_EXPIRED(401, "Token Expired"),
+
+    ;
 
     /**
      * 状 态 码
@@ -32,10 +31,8 @@ public enum ResultCode {
     @Getter
     private final String message;
 
-    /**
-     * 构 造 方 法
-     */
-    ResultCode(int code, String message) {
+
+    ResponseStatusEnum(int code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -45,7 +45,7 @@ public class R<T> implements Serializable {
      * 成 功 操 作 , 携 带 数 据
      */
     public static <T> R<T> success(T data) {
-        return success(ResultCode.SUCCESS.getMessage(), data);
+        return success(ResponseStatusEnum.SUCCESS.getMessage(), data);
     }
 
     /**
@@ -59,7 +59,7 @@ public class R<T> implements Serializable {
      * 成 功 操 作, 携 带 消 息 和 携 带 数 据
      */
     public static <T> R<T> success(String message, T data) {
-        return success(ResultCode.SUCCESS.getCode(), message, data);
+        return success(ResponseStatusEnum.SUCCESS.getCode(), message, data);
     }
 
     /**
@@ -85,7 +85,7 @@ public class R<T> implements Serializable {
      * 失 败 操 作, 默 认 数 据
      */
     public static <T> R<T> failure() {
-        return failure(ResultCode.SUCCESS.getMessage());
+        return failure(ResponseStatusEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -99,14 +99,14 @@ public class R<T> implements Serializable {
      * 失 败 操 作, 携 带 自 定 义 消 息 和 数 据
      */
     public static <T> R<T> failure(String message, T data) {
-        return failure(ResultCode.FAILURE.getCode(), message, data);
+        return failure(ResponseStatusEnum.FAILURE.getCode(), message, data);
     }
 
     /**
      * 失 败 操 作, 携 带 自 定 义 状 态 码 和 自 定 义 消 息
      */
     public static <T> R<T> failure(int code, String message) {
-        return failure(ResultCode.FAILURE.getCode(), message, null);
+        return failure(ResponseStatusEnum.FAILURE.getCode(), message, null);
     }
 
     /**
@@ -125,7 +125,7 @@ public class R<T> implements Serializable {
      * Boolean 返 回 操 作, 携 带 默 认 返 回 值
      */
     public static <T> R<T> decide(boolean b) {
-        return decide(b, ResultCode.SUCCESS.getMessage(), ResultCode.FAILURE.getMessage());
+        return decide(b, ResponseStatusEnum.SUCCESS.getMessage(), ResponseStatusEnum.FAILURE.getMessage());
     }
 
     /**
