@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class LoggingFactory {
 
-    private static final String URL = "jdbc:mysql://121.199.14.146:3306/my_test?useSSL=false";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/my_test?useSSL=false";
 
     private static final String USERNAME = "root";
 
