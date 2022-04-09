@@ -23,6 +23,7 @@ public class AuthenticationController {
     private AuthenticationBiz authBiz;
 
     @PostMapping("/register")
+    @Logging(title = "注册", describe = "用户注册")
     public R<AppKeyInfoDTO> register(@RequestBody AppKeyInfoDTO appKeyInfoDTO) {
         AppKeyInfoDTO register = authBiz.register(appKeyInfoDTO);
         if (ObjectUtil.isNotEmpty(register)) {
@@ -33,7 +34,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/nonce")
-    @Logging(title = "获取随机数", describe = "获取随机数")
+    @Logging(title = "获取随机数", describe = "签名随机数")
     public R<Integer> nonce(String appKey) {
         Integer nonce = authBiz.nonce(appKey);
         return R.success(nonce);

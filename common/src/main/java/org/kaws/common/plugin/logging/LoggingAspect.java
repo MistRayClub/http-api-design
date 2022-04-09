@@ -1,6 +1,5 @@
 package org.kaws.common.plugin.logging;
 
-import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,11 +9,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.kaws.common.annotation.Logging;
 import org.kaws.common.domain.dto.SysLogDTO;
-import org.kaws.common.domain.model.SysLog;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
