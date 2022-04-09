@@ -2,6 +2,7 @@ package org.kaws.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import org.kaws.biz.AuthenticationBiz;
+import org.kaws.common.annotation.Logging;
 import org.kaws.common.reponse.R;
 import org.kaws.dto.AppKeyInfoDTO;
 import org.kaws.dto.AuthenticationDTO;
@@ -32,12 +33,14 @@ public class AuthenticationController {
     }
 
     @GetMapping("/nonce")
+    @Logging(title = "获取随机数", describe = "获取随机数")
     public R<Integer> nonce(String appKey) {
         Integer nonce = authBiz.nonce(appKey);
         return R.success(nonce);
     }
 
     @PostMapping("/verify")
+    @Logging(title = "验签", describe = "验签通过，并发放token")
     public R<String> verify(@RequestBody AuthenticationDTO authenticationDTO, HttpServletRequest request) {
         String uri = request.getRequestURI();
         authenticationDTO.setUrl(uri);
@@ -45,7 +48,7 @@ public class AuthenticationController {
         Boolean flag = authBiz.verify(authenticationDTO, signature);
         if (flag) {
             String jwt = authBiz.generateJWT(authenticationDTO);
-            return R.success("generate jwt succeed",jwt);
+            return R.success("generate jwt succeed", jwt);
         }
         return R.failure("verify signature failed, please check your configuration");
     }

@@ -1,6 +1,8 @@
 package org.kaws.common.plugin.logging;
 
 import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.json.JSONUtil;
 import org.kaws.common.domain.dto.SysLogDTO;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,7 @@ import java.util.List;
 @Component
 public class LoggingFactory {
 
-    private static final String URL = "jdbc:mysql://121.199.14.146:3306/my_test?serverTimezone=Asia/Shanghai&useSSL=false";
+    private static final String URL = "jdbc:mysql://121.199.14.146:3306/my_test?useSSL=false";
 
     private static final String USERNAME = "root";
 
@@ -29,23 +31,23 @@ public class LoggingFactory {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            String sql = "insert into sys_log values(?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "insert into sys_log(id,title,description,method,operate_url,request_param,request_body,response_body,success,error_msg,extra) " +
+                    "values(?,?,?,?,?,?,?,?,?,?,?)";
             preparedStatement = conn.prepareStatement(sql);
 
             for (int i = 0; i < batchList.size(); i++) {
                 SysLogDTO item = batchList.get(i);
-                preparedStatement.setString(1, item.getId());
-                preparedStatement.setString(2, item.getTitle());
-                preparedStatement.setString(3, item.getDescription());
-                preparedStatement.setString(4, item.getMethod());
-                preparedStatement.setString(5, item.getOperateUrl());
-                preparedStatement.setString(6, item.getRequestParam());
-                preparedStatement.setString(7, item.getRequestBody());
-                preparedStatement.setString(8, item.getResponseBody());
-                preparedStatement.setInt(9, BooleanUtil.isFalse(item.isSuccess()) ? 0 : 1);
-                preparedStatement.setString(10, item.getErrorMsg());
-                preparedStatement.setObject(11, item.getCreateTime());
-                preparedStatement.setString(12, item.getTitle());
+                preparedStatement.setObject(1, item.getId());
+                preparedStatement.setObject(2, item.getTitle());
+                preparedStatement.setObject(3, item.getDescription());
+                preparedStatement.setObject(4, item.getMethod());
+                preparedStatement.setObject(5, item.getOperateUrl());
+                preparedStatement.setObject(6, item.getRequestParam());
+                preparedStatement.setObject(7, item.getRequestBody());
+                preparedStatement.setObject(8, item.getResponseBody());
+                preparedStatement.setObject(9, BooleanUtil.isFalse(item.isSuccess()) ? 0 : 1);
+                preparedStatement.setObject(10, item.getErrorMsg());
+                preparedStatement.setObject(11, ObjectUtil.isNotEmpty(item.getMap()) ? JSONUtil.toJsonStr(item.getMap()) : null);
                 preparedStatement.addBatch();
                 if (i % 100 == 0) {
                     preparedStatement.executeBatch();
@@ -54,7 +56,6 @@ public class LoggingFactory {
             }
             preparedStatement.executeBatch();
             preparedStatement.clearBatch();
-            conn.commit();
         } finally {
             if (preparedStatement != null) {
                 preparedStatement.close();
@@ -64,5 +65,6 @@ public class LoggingFactory {
             }
         }
     }
+
 
 }

@@ -1,16 +1,22 @@
 package org.kaws.common.plugin.logging;
 
+import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.kaws.common.annotation.Logging;
+import org.kaws.common.domain.dto.SysLogDTO;
 import org.kaws.common.domain.model.SysLog;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Bosco
@@ -29,22 +35,23 @@ public class LoggingAspect {
 
     @Around("loggingPointCut()")
     private Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        SysLog sysLog = new SysLog();
+        SysLogDTO sysLogDTO = new SysLogDTO();
         Object result;
         try {
             Logging loggingAnnotation = getLogging(joinPoint);
-            sysLog.setId(IdUtil.getSnowflakeNextIdStr());
-            sysLog.setTitle(loggingAnnotation.value());
-            sysLog.setTitle(loggingAnnotation.title());
-            sysLog.setDescription(loggingAnnotation.describe());
-            sysLog.setSuccess(true);
+            sysLogDTO.setId(IdUtil.getSnowflakeNextIdStr());
+            sysLogDTO.setTitle(loggingAnnotation.value());
+            sysLogDTO.setTitle(loggingAnnotation.title());
+            sysLogDTO.setDescription(loggingAnnotation.describe());
+            sysLogDTO.setSuccess(true);
             result = joinPoint.proceed();
         } catch (Exception exception) {
-            sysLog.setSuccess(false);
-            sysLog.setErrorMsg(exception.getMessage());
+            sysLogDTO.setSuccess(false);
+            sysLogDTO.setErrorMsg(exception.getMessage());
             throw exception;
         } finally {
-
+            BlockingQueue<SysLogDTO> tempLogQueue = SpringUtil.getBean("logQueue");
+            tempLogQueue.offer(sysLogDTO, 2, TimeUnit.SECONDS);
         }
         return result;
     }

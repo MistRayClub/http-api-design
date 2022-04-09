@@ -12,9 +12,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Configuration;
 
 import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -39,17 +37,19 @@ public class LogConfig implements InitializingBean {
 
         ThreadUtil.schedule(BaseConstant.LOG_EXECUTOR, () -> {
             try {
-                BlockingQueue<SysLogDTO> tempLogQueue = SpringUtil.getBean(new TypeReference<ArrayBlockingQueue<SysLogDTO>>() {
-                });
+                BlockingQueue<SysLogDTO> tempLogQueue = SpringUtil.getBean("logQueue");
                 if (ObjectUtil.isNotEmpty(tempLogQueue)) {
                     Reference<ArrayList<SysLogDTO>> batchListWeakReference = ReferenceUtil.create(ReferenceUtil.ReferenceType.WEAK, new ArrayList<>(tempLogQueue));
 
                     LoggingFactory loggingFactory = SpringUtil.getBean(LoggingFactory.class);
                     loggingFactory.saveBatch(Objects.requireNonNull(batchListWeakReference.get()));
+                    tempLogQueue.clear();
                 }
             } catch (Exception e) {
                 log.error("Saving Logs occurred error: {}", e.getMessage());
+            } finally {
+                System.gc();
             }
-        }, 10, 2, TimeUnit.SECONDS, true);
+        }, 2, 1, TimeUnit.SECONDS, true);
     }
 }
