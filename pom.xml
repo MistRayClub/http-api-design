@@ -30,6 +30,7 @@
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
         <hutool.version>5.8.0.M1</hutool.version>
+        <aspectjweaver.version>1.9.5</aspectjweaver.version>
     </properties>
 
     <dependencyManagement>
