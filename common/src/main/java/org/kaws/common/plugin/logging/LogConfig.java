@@ -1,6 +1,5 @@
 package org.kaws.common.plugin.logging;
 
-import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReferenceUtil;
