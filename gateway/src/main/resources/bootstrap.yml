@@ -28,3 +28,10 @@ spring:
             - name: Authorize
               args:
                 enable: true
+            - name: RequestRateLimiter
+              args:
+                 # 允许用户每秒执行多少请求，而不丢弃任何请求
+                 redis-rate-limiter.replenishRate: 10
+                 # 用户在一秒钟内执行的最大请求数
+                 redis-rate-limiter.burstCapacity: 50
+                 key-resolver: '#{@ipKeyResolver}'
