@@ -2,6 +2,7 @@ package org.kaws.common.reponse;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.kaws.common.enums.CodeEnum;
 
 import java.io.Serializable;
 

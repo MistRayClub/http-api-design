@@ -3,6 +3,7 @@ package org.kaws.gateway.exception;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.kaws.common.exception.BusinessException;
+import org.kaws.common.exception.NotEnableAuthorizeException;
 import org.kaws.common.exception.TokenInvalidException;
 import org.kaws.common.reponse.R;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
@@ -56,6 +57,11 @@ public class CustomGatewayExceptionHandler implements ErrorWebExceptionHandler {
 
         if (throwable instanceof TokenInvalidException) {
             TokenInvalidException exception = (TokenInvalidException) throwable;
+            exceptionHandlerResult.set(R.failure(exception.getCode(), exception.getMessage()));
+        }
+
+        if (throwable instanceof NotEnableAuthorizeException) {
+            NotEnableAuthorizeException exception = (NotEnableAuthorizeException) throwable;
             exceptionHandlerResult.set(R.failure(exception.getCode(), exception.getMessage()));
         }
 

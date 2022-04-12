@@ -25,4 +25,6 @@ spring:
           predicates:
             - Path=/sys/log/**
           filters:
-            - VerifyTokenFilter
+            - name: Authorize
+              args:
+                enable: true

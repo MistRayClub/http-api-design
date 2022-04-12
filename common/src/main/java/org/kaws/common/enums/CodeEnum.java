@@ -1,4 +1,4 @@
-package org.kaws.common.reponse;
+package org.kaws.common.enums;
 
 import lombok.Getter;
 
@@ -16,6 +16,8 @@ public enum CodeEnum {
     TOKEN_INVALID(401, "Token Invalid"),
 
     TOKEN_EXPIRED(401, "Token Expired"),
+
+    NOT_ENABLE_AUTHORIZE(406, "Not Enable Authorize"),
 
     ;
 
