@@ -23,6 +23,7 @@ import reactor.core.publisher.Mono;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * @author Bosco
@@ -81,11 +82,19 @@ public class CustomGatewayExceptionHandler implements ErrorWebExceptionHandler {
 
 
     protected Mono<ServerResponse> renderErrorResponse(ServerRequest request) {
+        // ThreadLocal清除
+        Function<Boolean, R> getHandlerResult = (remove) -> {
+            R result = exceptionHandlerResult.get();
+            if (remove) {
+                exceptionHandlerResult.remove();
+            }
+            return result;
+        };
         return ServerResponse
-                .status(Objects.nonNull(exceptionHandlerResult) && Objects.nonNull(exceptionHandlerResult.get())
+                .status(Objects.nonNull(exceptionHandlerResult) && Objects.nonNull(getHandlerResult.apply(false))
                         && exceptionHandlerResult.get().getCode() == HttpStatus.UNAUTHORIZED.value() ? HttpStatus.UNAUTHORIZED : HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(exceptionHandlerResult.get()));
+                .body(BodyInserters.fromValue(getHandlerResult.apply(true)));
     }
 
     private class ResponseContext implements ServerResponse.Context {
