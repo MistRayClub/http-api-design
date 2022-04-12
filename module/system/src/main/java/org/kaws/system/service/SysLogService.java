@@ -1,4 +1,4 @@
-package org.kaws.common.service;
+package org.kaws.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.kaws.common.domain.model.SysLog;

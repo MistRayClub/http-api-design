@@ -1,9 +1,9 @@
-package org.kaws.common.service.impl;
+package org.kaws.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.kaws.common.domain.model.SysLog;
-import org.kaws.common.mapper.SysLogMapper;
-import org.kaws.common.service.SysLogService;
+import org.kaws.system.mapper.SysLogMapper;
+import org.kaws.system.service.SysLogService;
 import org.springframework.stereotype.Service;
 
 /**

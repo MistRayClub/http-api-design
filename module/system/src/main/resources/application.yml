@@ -2,14 +2,14 @@ spring:
   profiles:
     active: dev
   application:
-    name: auth-service
+    name: log-service
   cloud:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
 
 server:
-  port: 8080
+  port: 8081
   servlet:
     session:
       timeout: 120m

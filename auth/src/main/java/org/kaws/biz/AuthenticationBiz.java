@@ -33,7 +33,7 @@ public class AuthenticationBiz {
 
     private static final String JWT_SECRET = "LebronJames";
 
-    private static final Long EXPIRE = 5 * 60 * 1000L;
+    private static final Long EXPIRE = 30 * 60 * 1000L;
 
     @Resource
     private AppKeyInfoService appKeyInfoService;
@@ -51,10 +51,15 @@ public class AuthenticationBiz {
     }
 
     public Integer nonce(String appKey) {
-        Integer nonce = RandomUtil.randomInt(Integer.MAX_VALUE);
         String key = String.format(APP_NONCE_KEY, appKey);
-        stringRedisTemplate.opsForValue().set(key, String.valueOf(nonce), EXPIRE, TimeUnit.MILLISECONDS);
-        return nonce;
+        String existedNonce = stringRedisTemplate.opsForValue().get(key);
+        if (StrUtil.isNotEmpty(existedNonce)) {
+            return Integer.valueOf(existedNonce);
+        } else {
+            Integer nonce = RandomUtil.randomInt(Integer.MAX_VALUE);
+            stringRedisTemplate.opsForValue().set(key, String.valueOf(nonce), EXPIRE, TimeUnit.MILLISECONDS);
+            return nonce;
+        }
     }
 
     public Boolean verify(AuthenticationDTO auth, String signature) {
@@ -63,17 +68,16 @@ public class AuthenticationBiz {
         if (StrUtil.isEmpty(existedNonce) || !Objects.equals(Integer.valueOf(existedNonce), auth.getNonce())) {
             return false;
         }
-        Long timestamp = auth.getTimestamp();
-        long now = System.currentTimeMillis();
-        if (now > timestamp) {
-            return false;
-        }
         AppKeyInfo entity = appKeyInfoService.getOne(Wrappers.<AppKeyInfo>lambdaQuery().eq(AppKeyInfo::getAppKey, auth.getAppKey()));
         if (ObjectUtil.isEmpty(entity)) {
             return false;
         }
         String createdSign = createSign(auth, entity.getAppSecret());
-        if (signature.equals(createdSign)) return true;
+        if (signature.equals(createdSign)) {
+            long now = System.currentTimeMillis();
+            auth.setTimestamp(now + 5 * 60 * 1000);
+            return true;
+        }
         return false;
     }
 
