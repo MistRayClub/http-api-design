@@ -1,4 +1,4 @@
-package org.kaws.model;
+package org.kaws.pojo.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

@@ -2,7 +2,7 @@ package org.kaws.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-import org.kaws.model.AppKeyInfo;
+import org.kaws.pojo.model.AppKeyInfo;
 
 /**
  * @author Bosco

@@ -4,8 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import org.kaws.biz.AuthenticationBiz;
 import org.kaws.common.annotation.Logging;
 import org.kaws.common.reponse.R;
-import org.kaws.dto.AppKeyInfoDTO;
-import org.kaws.dto.AuthenticationDTO;
+import org.kaws.pojo.dto.AppKeyInfoDTO;
+import org.kaws.pojo.dto.AuthenticationDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

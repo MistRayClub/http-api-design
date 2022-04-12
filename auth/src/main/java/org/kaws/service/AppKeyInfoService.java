@@ -1,7 +1,7 @@
 package org.kaws.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import org.kaws.model.AppKeyInfo;
+import org.kaws.pojo.model.AppKeyInfo;
 
 
 /**

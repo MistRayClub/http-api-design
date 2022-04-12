@@ -2,7 +2,7 @@ package org.kaws.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.kaws.mapper.AppKeyInfoMapper;
-import org.kaws.model.AppKeyInfo;
+import org.kaws.pojo.model.AppKeyInfo;
 import org.kaws.service.AppKeyInfoService;
 import org.springframework.stereotype.Service;
 

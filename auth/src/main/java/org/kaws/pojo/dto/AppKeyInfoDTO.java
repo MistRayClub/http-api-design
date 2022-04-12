@@ -1,4 +1,4 @@
-package org.kaws.dto;
+package org.kaws.pojo.dto;
 
 import lombok.Getter;
 import lombok.Setter;
