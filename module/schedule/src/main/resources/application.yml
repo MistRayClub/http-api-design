@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: schedule-service
+  main:
+    allow-bean-definition-overriding: true
+
+server:
+  port: 8082
+  servlet:
+    session:
+      timeout: 120m
+
+logging:
+  config: classpath:logback-spring.xml
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # 别名扫描
+  type-aliases-package: com.kaws
+  configuration:
+    ## 日志实现
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
