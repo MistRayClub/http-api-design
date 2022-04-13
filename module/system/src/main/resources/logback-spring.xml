@@ -5,7 +5,7 @@
               value="%boldMagenta(%-12(%d{yyyy-MM-dd HH:mm:ss.SSS})) |- %highlight(%-5level) %cyan([%thread]) %green(%c [%L]) -| %msg%n"/>
     <property name="LOG_NAME" value="pear"/>
     <!--所在项目包 打印日志用-->
-    <property name="PACKAGE_NAME" value="com.kaws.auth"/>
+    <property name="PACKAGE_NAME" value="com.kaws.system"/>
     <!-- test文件路径 -->
     <property name="TEST_FILE_PATH" value="/var/log/${LOG_NAME}"/>
     <!-- pro文件路径 -->
