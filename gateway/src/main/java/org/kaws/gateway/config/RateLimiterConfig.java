@@ -22,7 +22,7 @@ public class RateLimiterConfig {
         return exchange -> Mono.just(Objects.requireNonNull(exchange.getRequest().getRemoteAddress()).getAddress().getHostAddress());
     }
 
-    @Bean
+    @Bean(value = "pathKeyResolver")
     public KeyResolver pathKeyResolver() {
         return exchange -> Mono.just(exchange.getRequest().getPath().value());
     }
