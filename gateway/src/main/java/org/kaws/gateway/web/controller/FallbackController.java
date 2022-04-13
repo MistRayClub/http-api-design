@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Bosco
  * @date 2022/4/13 11:12 上午
+ * @see org.kaws.gateway.config.FallbackConfig
  */
 
+@Deprecated
 @RestController
 public class FallbackController {
 
