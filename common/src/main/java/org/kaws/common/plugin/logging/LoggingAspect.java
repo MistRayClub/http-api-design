@@ -1,7 +1,9 @@
 package org.kaws.common.plugin.logging;
 
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -44,11 +46,8 @@ public class LoggingAspect {
 
         Function<ServletRequest, String> getRequestBody = request -> {
             try {
-                int len = request.getContentLength();
                 ServletInputStream inputStream = request.getInputStream();
-                byte[] buffer = new byte[len];
-                inputStream.read(buffer, 0, len);
-                return new String(buffer);
+                return HttpUtil.getString(inputStream, CharsetUtil.CHARSET_UTF_8, false);
             } catch (IOException e) {
                 log.error("parse request body error: {}", e.getMessage());
             }
