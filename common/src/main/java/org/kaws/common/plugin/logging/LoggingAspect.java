@@ -2,7 +2,7 @@ package org.kaws.common.plugin.logging;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.json.JSONUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -34,7 +34,6 @@ import java.util.function.Function;
 @Component
 public class LoggingAspect {
 
-
     @Pointcut("@annotation(org.kaws.common.annotation.Logging) || @within(org.kaws.common.annotation.Logging)")
     public void loggingPointCut() {
     }
@@ -61,7 +60,7 @@ public class LoggingAspect {
         HttpServletRequest request = requestAttributes.getRequest();
 
         SysLogDTO sysLogDTO = new SysLogDTO();
-        Object result;
+        Object result = null;
         try {
             Logging loggingAnnotation = getLogging(joinPoint);
             sysLogDTO.setId(IdUtil.getSnowflakeNextIdStr());
@@ -79,7 +78,7 @@ public class LoggingAspect {
             sysLogDTO.setErrorMsg(exception.getMessage());
             throw exception;
         } finally {
-            sysLogDTO.setResponseBody(JSONUtil.toJsonStr(request));
+            sysLogDTO.setResponseBody(SpringUtil.getBean(ObjectMapper.class).writeValueAsString(result));
             BlockingQueue<SysLogDTO> tempLogQueue = SpringUtil.getBean("logQueue");
             tempLogQueue.offer(sysLogDTO, 2, TimeUnit.SECONDS);
         }
