@@ -1,9 +1,7 @@
 package org.kaws.common.plugin.logging;
 
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import cn.hutool.http.HttpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,14 +15,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * @author Bosco
@@ -43,17 +37,6 @@ public class LoggingAspect {
 
     @Around("loggingPointCut()")
     private Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-
-        Function<ServletRequest, String> getRequestBody = request -> {
-            try {
-                ServletInputStream inputStream = request.getInputStream();
-                return HttpUtil.getString(inputStream, CharsetUtil.CHARSET_UTF_8, false);
-            } catch (IOException e) {
-                log.error("parse request body error: {}", e.getMessage());
-            }
-            return null;
-        };
-
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert requestAttributes != null;
         HttpServletRequest request = requestAttributes.getRequest();
@@ -70,7 +53,6 @@ public class LoggingAspect {
             sysLogDTO.setOperateUrl(request.getRequestURI());
             sysLogDTO.setMethod(request.getMethod());
             sysLogDTO.setRequestParam(request.getQueryString());
-            sysLogDTO.setRequestBody(getRequestBody.apply(request));
             result = joinPoint.proceed();
         } catch (Exception exception) {
             sysLogDTO.setSuccess(false);
