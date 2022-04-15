@@ -2,6 +2,7 @@ package org.kaws.common.plugin.logging;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -15,8 +16,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +58,13 @@ public class LoggingAspect {
             sysLogDTO.setOperateUrl(request.getRequestURI());
             sysLogDTO.setMethod(request.getMethod());
             sysLogDTO.setRequestParam(request.getQueryString());
+            Object[] args = joinPoint.getArgs();
+            List<Object> filterList = new ArrayList<>();
+            for (Object arg : args) {
+                if (arg instanceof ServletRequest || arg instanceof ServletResponse) continue;
+                filterList.add(arg);
+            }
+            sysLogDTO.setRequestBody(JSONUtil.toJsonStr(filterList));
             result = joinPoint.proceed();
         } catch (Exception exception) {
             sysLogDTO.setSuccess(false);
